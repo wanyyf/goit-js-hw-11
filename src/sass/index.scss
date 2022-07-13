@@ -1,2 +1,20 @@
 @import './common';
 @import './example';
+button {
+    background-color: blue;
+    color: azure;
+}
+.load-more {
+border-radius: 15%;
+background-color: yellow;
+margin: 30px;
+margin-left: 50vh;
+color: black;
+
+    
+}
+
+.search-form {
+    margin: 0 40vh;
+    display: flex;
+}
