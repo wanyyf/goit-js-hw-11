@@ -15,8 +15,8 @@ export class PixabayApi {
   async fetchPhotos() {
     const params = new URLSearchParams({
       key: this.#API_KEY,
-      q: `${this.query}`,
-      page: `${this.page}`,
+      q: this.query,
+      page: this.page,
       per_page: 40,
       imageType: 'photo',
       orientation: 'horizontal',
@@ -28,6 +28,7 @@ export class PixabayApi {
       this.totalHits = response.data.totalHits;
       return response.data.hits;
     } catch (error) {
+      console.log(error);
       Notiflix.Notify.warning('error');
     }
   }
@@ -39,6 +40,7 @@ export class PixabayApi {
   resetPage() {
     this.page = 1;
   }
+
   setQuery(query) {
     this.query = query;
   }
