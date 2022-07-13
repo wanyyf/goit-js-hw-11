@@ -16,7 +16,9 @@ const pixabayFetch = new PixabayApi();
 
 const fetchRenderEnd = async () => {
   const arrayPromis = await pixabayFetch.fetchPhotos();
+
   if (arrayPromis.length === 0) {
+    loadMoreBtnEl.classList.add('hidedisplay');
     Notiflix.Notify.failure(
       'Sorry, there are no images matching your search query. Please try again.'
     );
@@ -34,17 +36,19 @@ const onFormSubmit = async e => {
   const { searchQuery } = e.currentTarget.elements;
   if (searchQuery.value.trim() === '') {
     Notiflix.Notify.warning(`Please! Enter the request for the desired image.`);
+    loadMoreBtnEl.classList.add('hidedisplay');
     return;
   }
   pixabayFetch.setQuery(searchQuery.value.trim());
   await fetchRenderEnd();
   if (pixabayFetch.getTotalHits() === 0) {
     return;
+  } else {
+    Notiflix.Notify.success(
+      `Hooray! We found ${pixabayFetch.getTotalHits()} images.`
+    );
+    loadMoreBtnEl.classList.remove('hidedisplay');
   }
-  Notiflix.Notify.success(
-    `Hooray! We found ${pixabayFetch.getTotalHits()} images.`
-  );
-  loadMoreBtnEl.style.display = 'block';
 };
 
 formEl.addEventListener('submit', onFormSubmit);
@@ -53,7 +57,9 @@ loadMoreBtnEl.addEventListener('click', onLoadMoreBtnClick);
 async function onLoadMoreBtnClick() {
   await pixabayFetch.increasePage();
   const arrayPromis = await pixabayFetch.fetchPhotos();
-
+  if (arrayPromis.length < 40) {
+    loadMoreBtnEl.classList.add('hidedisplay');
+  }
   boxGallaryEl.insertAdjacentHTML('beforeend', elementCreate(arrayPromis));
   gallerySimpleLightbox.refresh();
 }
